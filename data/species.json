@@ -1,0 +1,563 @@
+{
+  "source": "Guía ilustrada de las aves del campus de la Universidad Autónoma de Occidente, primera edición (2023)",
+  "reportedSpecies": 84,
+  "digitizedInThisDemo": 29,
+  "records": [
+    {
+      "id": "torcaza-naguiblanca",
+      "common": "Torcaza Nagüiblanca",
+      "scientific": "Zenaida auriculata",
+      "english": "Eared Dove",
+      "family": "Columbidae",
+      "order": "Columbiformes",
+      "description": "Es una de las palomas más ampliamente distribuidas de Suramérica. La guía la describe como marrón grisácea, con parche iridiscente en el cuello, manchas negras en las alas y patas rojizas; suele encontrarse en hábitats abiertos y perturbados.",
+      "traits": [
+        "Parche iridiscente",
+        "Manchas negras en las alas",
+        "Hábitats abiertos"
+      ],
+      "wikiId": "3906",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed"
+    },
+    {
+      "id": "tortolita-rojiza",
+      "common": "Tortolita Rojiza",
+      "scientific": "Columbina talpacoti",
+      "english": "Ruddy Ground Dove",
+      "family": "Columbidae",
+      "order": "Columbiformes",
+      "description": "Paloma diminuta de cola corta y cuadrada. La guía destaca el tono café arenoso, las manchas oscuras en las alas y el rufo visible durante el vuelo. Habita áreas abiertas o arbustivas.",
+      "traits": [
+        "Tamaño pequeño",
+        "Tono rufo",
+        "Zonas abiertas"
+      ],
+      "wikiId": "2411",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed"
+    },
+    {
+      "id": "paloma-domestica",
+      "common": "Paloma Doméstica",
+      "scientific": "Columba livia",
+      "english": "Rock Pigeon",
+      "family": "Columbidae",
+      "order": "Columbiformes",
+      "description": "El inventario del campus registra la paloma doméstica. La guía señala que presenta gran variedad de colores: gris, negro, blanco o café-anaranjado.",
+      "traits": [
+        "Variación de plumaje",
+        "Entornos urbanos"
+      ],
+      "wikiId": null,
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed"
+    },
+    {
+      "id": "garrapatero",
+      "common": "Garrapatero",
+      "scientific": "Crotophaga ani",
+      "english": "Smooth-billed Ani",
+      "family": "Cuculidae",
+      "order": "Cuculiformes",
+      "description": "Ave enteramente negra, de cola larga y pico grueso con la parte superior curvada. La guía indica que suele encontrarse en pequeñas bandadas y prefiere hábitats abiertos con arbustos.",
+      "traits": [
+        "Plumaje negro",
+        "Cola larga",
+        "Pequeñas bandadas"
+      ],
+      "wikiId": "2458",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed"
+    },
+    {
+      "id": "cuco-ardilla",
+      "common": "Cuco Ardilla",
+      "scientific": "Piaya cayana",
+      "english": "Squirrel Cuckoo",
+      "family": "Cuculidae",
+      "order": "Cuculiformes",
+      "description": "Cuclillo de color rojo canela y cola larga. La guía lo sitúa en una variedad de hábitats arbolados y bordes de bosque; se alimenta sigilosamente en los estratos medios y altos.",
+      "traits": [
+        "Rojo canela",
+        "Cola larga",
+        "Estratos medios y altos"
+      ],
+      "wikiId": "3326",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed"
+    },
+    {
+      "id": "bienparado",
+      "common": "Bienparado",
+      "scientific": "Nyctibius griseus",
+      "english": "Common Potoo",
+      "family": "Nyctibiidae",
+      "order": "Caprimulgiformes",
+      "description": "Ave nocturna de cabeza grande y ojos amarillos, con plumaje marrón grisáceo marcado. La guía indica que pasa el día posada en el extremo de un tocón y que por la noche caza insectos al vuelo.",
+      "traits": [
+        "Hábitos nocturnos",
+        "Ojos amarillos",
+        "Camuflaje en ramas"
+      ],
+      "wikiId": "3153",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed",
+      "editorialNote": "La página individual del PDF presenta una familia y un nombre en inglés que no coinciden con el inventario. Esta ficha prioriza la combinación de nombre científico y familia del inventario; requiere revisión taxonómica editorial."
+    },
+    {
+      "id": "vencejo",
+      "common": "Vencejo",
+      "scientific": "Streptoprocne zonaris",
+      "english": "White-collared Swift",
+      "family": "Apodidae",
+      "order": "Caprimulgiformes",
+      "description": "Vencejo grande que puede verse girando en bandadas. La guía resalta su collar blanco completo y la punta de la cola horquetada.",
+      "traits": [
+        "Collar blanco",
+        "Vuelo en bandadas",
+        "Cola horquetada"
+      ],
+      "wikiId": "3669",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed"
+    },
+    {
+      "id": "colibri-colirufo",
+      "common": "Colibrí Colirrufo",
+      "scientific": "Amazilia tzacatl",
+      "english": "Rufous-tailed Hummingbird",
+      "family": "Trochilidae",
+      "order": "Caprimulgiformes",
+      "description": "Colibrí mediano de tierras bajas tropicales. La guía menciona que visita jardines y comederos, y que el color canela de la cola se extiende ampliamente.",
+      "traits": [
+        "Cola canela",
+        "Visita flores y comederos",
+        "Jardines"
+      ],
+      "wikiId": "1984",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed",
+      "editorialNote": "La guía incluye esta ficha de la familia Trochilidae dentro de la sección Caprimulgiformes. Se conserva la clasificación tal como aparece en la fuente y se señala para revisión taxonómica institucional antes de publicar."
+    },
+    {
+      "id": "colibri-coliazul",
+      "common": "Colibrí Coliazul",
+      "scientific": "Saucerottia saucerottei",
+      "english": "Steely-vented Hummingbird",
+      "family": "Trochilidae",
+      "order": "Caprimulgiformes",
+      "description": "Colibrí pequeño, mayormente verde y con cola azul oscura. La guía lo describe alimentándose de flores en bordes de bosque, arbustos secundarios y jardines.",
+      "traits": [
+        "Cola azul oscura",
+        "Pico recto",
+        "Jardines y bordes"
+      ],
+      "wikiId": "3523",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed",
+      "editorialNote": "La guía incluye esta ficha de la familia Trochilidae dentro de la sección Caprimulgiformes. Se conserva la clasificación tal como aparece en la fuente y se señala para revisión taxonómica institucional antes de publicar."
+    },
+    {
+      "id": "colibri-esmeralda",
+      "common": "Colibrí Esmeralda",
+      "scientific": "Chlorostilbon melanorhynchus",
+      "english": "Western Emerald",
+      "family": "Trochilidae",
+      "order": "Caprimulgiformes",
+      "description": "Colibrí pequeño. La guía describe al macho con plumaje verde esmeralda brillante y cola azul oscura; puede observarse alimentándose en jardines y bordes.",
+      "traits": [
+        "Verde esmeralda",
+        "Cola azul oscura",
+        "Jardines"
+      ],
+      "wikiId": "2321",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed",
+      "editorialNote": "La guía incluye esta ficha de la familia Trochilidae dentro de la sección Caprimulgiformes. Se conserva la clasificación tal como aparece en la fuente y se señala para revisión taxonómica institucional antes de publicar."
+    },
+    {
+      "id": "pellar",
+      "common": "Pellar",
+      "scientific": "Vanellus chilensis",
+      "english": "Southern Lapwing",
+      "family": "Charadriidae",
+      "order": "Charadriiformes",
+      "description": "Ave playera conspicua, con pecho negro, vientre blanco, cabeza gris y hombros bronceados. Según la guía aparece en hábitats abiertos, a menudo cerca del agua y también en pastizales.",
+      "traits": [
+        "Pecho negro",
+        "Vientre blanco",
+        "Pastizales y agua"
+      ],
+      "wikiId": "3869",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed"
+    },
+    {
+      "id": "garza-de-ganado",
+      "common": "Garza de ganado",
+      "scientific": "Bubulcus ibis",
+      "english": "Cattle Egret",
+      "family": "Ardeidae",
+      "order": "Pelecaniformes",
+      "description": "Garza pequeña y compacta, de pico amarillo grueso. La guía observa que puede alimentarse siguiendo ganado o tractores en zonas abiertas.",
+      "traits": [
+        "Pico amarillo",
+        "Áreas abiertas",
+        "Forrajeo en pastizales"
+      ],
+      "wikiId": "2142",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed"
+    },
+    {
+      "id": "ibis",
+      "common": "Ibis",
+      "scientific": "Phimosus infuscatus",
+      "english": "Bare-faced Ibis",
+      "family": "Threskiornithidae",
+      "order": "Pelecaniformes",
+      "description": "Ibis de plumaje oscuro con reflejos verdes y azules en las alas. La guía destaca la cara y el pico rosados; suele encontrarse en bandadas y forrajea en pastizales y humedales.",
+      "traits": [
+        "Cara rosada",
+        "Reflejos iridiscentes",
+        "Pastizales y humedales"
+      ],
+      "wikiId": "3307",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed"
+    },
+    {
+      "id": "cocli",
+      "common": "Coclí",
+      "scientific": "Theristicus caudatus",
+      "english": "Buff-necked Ibis",
+      "family": "Threskiornithidae",
+      "order": "Pelecaniformes",
+      "description": "Ibis robusto de cuello y cabeza beige, espalda y alas mayormente grises y pico largo curvado. La guía lo ubica en hábitats abiertos como pastizales y sabanas.",
+      "traits": [
+        "Cuello beige",
+        "Pico curvado",
+        "Pastizales y sabanas"
+      ],
+      "wikiId": "3762",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed"
+    },
+    {
+      "id": "gavilan-pollero",
+      "common": "Gavilán pollero",
+      "scientific": "Rupornis magnirostris",
+      "english": "Roadside Hawk",
+      "family": "Accipitridae",
+      "order": "Accipitriformes",
+      "description": "La guía lo describe posado a menudo en cables, postes y cercas. El adulto presenta ojos pálidos, pecho estriado y vientre barrado; su vuelo tiene aleteos rápidos y fuertes.",
+      "traits": [
+        "Ojos pálidos",
+        "Pecho estriado",
+        "Se posa en postes"
+      ],
+      "wikiId": "3506",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed"
+    },
+    {
+      "id": "currucutu",
+      "common": "Currucutú",
+      "scientific": "Megascops choliba",
+      "english": "Tropical Screech-Owl",
+      "family": "Strigidae",
+      "order": "Strigiformes",
+      "description": "Búho pequeño, marrón grisáceo y de marcas finas, con líneas en las partes inferiores. La guía señala que su vocalización facilita la identificación y que ocupa hábitats arbolados.",
+      "traits": [
+        "Hábitos nocturnos",
+        "Marcas finas",
+        "Vocalización característica"
+      ],
+      "wikiId": "2977",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed"
+    },
+    {
+      "id": "carpintero-habado",
+      "common": "Carpintero Habado",
+      "scientific": "Melanerpes rubricapillus",
+      "english": "Red-crowned Woodpecker",
+      "family": "Picidae",
+      "order": "Piciformes",
+      "description": "Carpintero mediano, beige pálido, con nuca y vientre rojizos y barras blancas y negras en la espalda. La guía señala que frecuenta bosques abiertos, bosque secundario y jardines.",
+      "traits": [
+        "Nuca rojiza",
+        "Espalda barrada",
+        "Jardines y bosque"
+      ],
+      "wikiId": "2989",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed",
+      "editorialNote": "El listado del PDF asocia el nombre Carpintero Habado con otro nombre científico. Esta ficha usa el nombre científico que figura en la ficha individual; revisar antes de publicación científica."
+    },
+    {
+      "id": "carpintero-cariblanco",
+      "common": "Carpintero Cariblanco",
+      "scientific": "Colaptes rubiginosus",
+      "english": "Golden-olive Woodpecker",
+      "family": "Picidae",
+      "order": "Piciformes",
+      "description": "Carpintero de tonalidad verde ampliamente distribuido en bosques tropicales y subtropicales. La guía destaca el rojo en la nuca de ambos sexos y su preferencia por niveles medios y altos del bosque.",
+      "traits": [
+        "Tonalidad verde",
+        "Rojo en la nuca",
+        "Estratos medios y altos"
+      ],
+      "wikiId": "2398",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed"
+    },
+    {
+      "id": "carpinterito-punteado",
+      "common": "Carpinterito Punteado",
+      "scientific": "Picumnus granadensis",
+      "english": "Grayish Piculet",
+      "family": "Picidae",
+      "order": "Piciformes",
+      "description": "Carpintero diminuto, de pico corto tipo cincel y plumaje marrón grisáceo. La guía lo describe moviéndose sobre ramas pequeñas y enredaderas; es restringido al oeste de Colombia.",
+      "traits": [
+        "Tamaño diminuto",
+        "Corona punteada",
+        "Oeste de Colombia"
+      ],
+      "wikiId": "3337",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed"
+    },
+    {
+      "id": "pigua",
+      "common": "Gavilán o Pigua",
+      "scientific": "Milvago chimachima",
+      "english": "Yellow-headed Caracara",
+      "family": "Falconidae",
+      "order": "Falconiformes",
+      "description": "La ficha ilustrada la describe con cuerpo beige pálido y alas marrón oscuro. Suele posarse en lugares visibles de espacios abiertos, bordes de ríos y pastizales.",
+      "traits": [
+        "Cuerpo beige",
+        "Alas oscuras",
+        "Se posa en espacios abiertos"
+      ],
+      "wikiId": null,
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed"
+    },
+    {
+      "id": "cernicalo-americano",
+      "common": "Cernícalo Americano",
+      "scientific": "Falco sparverius",
+      "english": "American Kestrel",
+      "family": "Falconidae",
+      "order": "Falconiformes",
+      "description": "Halcón pequeño, de alas largas y angostas y cola ancha. La guía menciona que suele posarse en cables junto a carreteras y cazar desde una percha o suspendido en el aire.",
+      "traits": [
+        "Halcón pequeño",
+        "Cola ancha",
+        "Perchas visibles"
+      ],
+      "wikiId": "2648",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed"
+    },
+    {
+      "id": "loro-cabeciazul",
+      "common": "Loro Cabeciazul",
+      "scientific": "Pionus menstruus",
+      "english": "Blue-headed Parrot",
+      "family": "Psittacidae",
+      "order": "Psittaciformes",
+      "description": "Loro mediano de cola corta y cuadrada, mayormente verde y con cabeza azul. La guía anota que los sexos son iguales y que su llamada suele emitirse dos o tres veces.",
+      "traits": [
+        "Cabeza azul",
+        "Cuerpo verde",
+        "Cola corta"
+      ],
+      "wikiId": "3349",
+      "image": "/assets/loro-cabeciazul.jpg",
+      "audioUrl": null,
+      "credit": "Fotografía de la galería de la guía UAO (2023); créditos del equipo de campo indicados en la publicación.",
+      "status": "transcribed"
+    },
+    {
+      "id": "guacamaya-cariseca",
+      "common": "Guacamaya Cariseca",
+      "scientific": "Ara severus",
+      "english": "Chestnut-fronted Macaw",
+      "family": "Psittacidae",
+      "order": "Psittaciformes",
+      "description": "Guacamaya pequeña para su grupo, de plumaje mayormente verde y cara blanquecina. La guía indica que se observa en parejas o bandadas pequeñas en bosque y espacios abiertos.",
+      "traits": [
+        "Plumaje verde",
+        "Cara blanquecina",
+        "Parejas o grupos pequeños"
+      ],
+      "wikiId": "2044",
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed"
+    },
+    {
+      "id": "periquito-bronceado",
+      "common": "Periquito Bronceado",
+      "scientific": "Brotogeris jugularis",
+      "english": "Orange-chinned Parakeet",
+      "family": "Psittacidae",
+      "order": "Psittaciformes",
+      "description": "Periquito pequeño y de vuelo rápido. La guía lo ubica en zonas húmedas de la vertiente Pacífica, en áreas arboladas, y señala su asociación en parejas o bandadas pequeñas.",
+      "traits": [
+        "Tamaño pequeño",
+        "Vuelo rápido",
+        "Bandadas pequeñas"
+      ],
+      "wikiId": null,
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "transcribed"
+    },
+    {
+      "id": "pechirrojo",
+      "common": "Pechirrojo",
+      "scientific": "Pyrocephalus rubinus",
+      "english": "Vermilion Flycatcher",
+      "family": "Tyrannidae",
+      "order": "Passeriformes",
+      "description": "Especie incluida en el inventario de Passeriformes de la guía. La publicación muestra fotografías de aves rojas en su galería general, pero no aporta un epígrafe que vincule esa imagen con esta ficha; la descripción individual y su identificación deben transcribirse y revisarse antes de completar el registro.",
+      "traits": [
+        "Tyrannidae",
+        "Registro en el inventario",
+        "Descripción por ampliar"
+      ],
+      "wikiId": null,
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "index-only",
+      "editorialNote": "La fotografía de ave roja se conserva sólo en la galería general; no se asigna a esta especie sin un epígrafe que confirme la correspondencia."
+    },
+    {
+      "id": "bichofue",
+      "common": "Bichofué",
+      "scientific": "Pitangus sulphuratus",
+      "english": "Great Kiskadee",
+      "family": "Tyrannidae",
+      "order": "Passeriformes",
+      "description": "Especie incluida en el inventario de aves del campus. La ficha individual y su descripción detallada están pendientes de digitalización editorial.",
+      "traits": [
+        "Tyrannidae",
+        "Registro en el inventario",
+        "Descripción por ampliar"
+      ],
+      "wikiId": null,
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "index-only"
+    },
+    {
+      "id": "azulejo-comun",
+      "common": "Azulejo Común",
+      "scientific": "Thraupis episcopus",
+      "english": "Blue-gray Tanager",
+      "family": "Thraupidae",
+      "order": "Passeriformes",
+      "description": "Especie listada en la familia Thraupidae dentro del inventario de la guía. Los rasgos, descripción individual y material sonoro requieren una transcripción y validación posterior.",
+      "traits": [
+        "Thraupidae",
+        "Registro en el inventario",
+        "Descripción por ampliar"
+      ],
+      "wikiId": null,
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "index-only"
+    },
+    {
+      "id": "cucarachero",
+      "common": "Cucarachero",
+      "scientific": "Troglodytes aedon",
+      "english": "House Wren",
+      "family": "Troglodytidae",
+      "order": "Passeriformes",
+      "description": "Especie incluida en el inventario de aves del campus. La ficha individual y los recursos de galería o canto aún requieren digitalización.",
+      "traits": [
+        "Troglodytidae",
+        "Registro en el inventario",
+        "Descripción por ampliar"
+      ],
+      "wikiId": null,
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "index-only"
+    },
+    {
+      "id": "sicalis-coronado",
+      "common": "Sicalis Coronado",
+      "scientific": "Sicalis flaveola",
+      "english": "Saffron Finch",
+      "family": "Thraupidae",
+      "order": "Passeriformes",
+      "description": "Especie listada en el inventario de la guía bajo la familia Thraupidae. La descripción individual está pendiente de transcripción.",
+      "traits": [
+        "Thraupidae",
+        "Registro en el inventario",
+        "Descripción por ampliar"
+      ],
+      "wikiId": null,
+      "image": null,
+      "audioUrl": null,
+      "credit": null,
+      "status": "index-only"
+    }
+  ]
+}

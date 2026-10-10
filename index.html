@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#FF051E" />
+  <meta name="description" content="Descubre las aves que habitan el campus de la Universidad Autónoma de Occidente. Guía ilustrada, búsqueda por especies y experiencia de campo." />
+  <title>Aves UAO — Un campus para la vida</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles/main.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido principal</a>
+  <header class="site-header">
+    <a class="brand" href="#inicio" aria-label="Aves UAO, inicio">
+      <span class="brand-mark" aria-hidden="true"><img src="/assets/brand-mark.svg" alt="" /></span>
+      <span class="brand-copy"><strong>aves <i>UAO</i></strong><small>campus para la vida</small></span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Abrir menú">
+      <span></span><span></span>
+    </button>
+    <nav id="primary-nav" class="primary-nav" aria-label="Navegación principal">
+      <a href="#explorar">Explorar</a>
+      <a href="#campus">El campus</a>
+      <a href="#realidad-aumentada">Realidad aumentada</a>
+    </nav>
+    <a class="header-cta" href="#explorar">Ir a la guía <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <div class="hero-photo" aria-hidden="true"></div>
+      <div class="hero-grain" aria-hidden="true"></div>
+      <div class="hero-content">
+        <p class="eyebrow eyebrow-light"><span class="eyebrow-line"></span> Universidad Autónoma de Occidente · Cali</p>
+        <h1 id="hero-title">Un campus.<br /><em>84 formas</em> de<br />mirar el cielo.</h1>
+        <p class="hero-deck">Entre jardines, senderos y árboles del sur de Cali, una comunidad alada encuentra un lugar para vivir.</p>
+        <div class="hero-actions">
+          <a class="button button-light" href="#explorar">Descubrir las aves <span aria-hidden="true">↗</span></a>
+          <a class="hero-text-link" href="#campus">Conoce el proyecto <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+      <div class="hero-caption"><span>01 / 03</span><span>Jornadas de avistamiento · UAO</span></div>
+      <div class="hero-stamp" aria-label="Guía ilustrada de las aves del campus, primera edición 2023"><span>GUÍA</span><b>UAO</b><span>2023</span></div>
+    </section>
+
+    <section class="facts-strip" aria-label="Datos de biodiversidad reportados en la guía UAO">
+      <div class="fact-intro"><span class="eyebrow">UNA GUÍA PARA OBSERVAR</span><p>La vida del campus,<br />vista desde el aire.</p></div>
+      <div class="fact"><strong>84</strong><span>especies<br />registradas</span></div>
+      <div class="fact"><strong>30</strong><span>familias<br />de aves</span></div>
+      <div class="fact"><strong>77</strong><span>géneros<br />documentados</span></div>
+      <p class="fact-source">Cifras de la guía ilustrada UAO · primera edición 2023</p>
+    </section>
+
+    <section class="explorer section-wrap" id="explorar" aria-labelledby="explorer-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-line"></span> Atlas de campo · Valle del Cauca</p>
+          <h2 id="explorer-title">Aves que hacen<br /><em>hogar aquí.</em></h2>
+        </div>
+        <p class="section-intro">Busca por nombre, familia o una señal que recuerdes. Cada ficha reúne la información disponible en la guía del campus.</p>
+      </div>
+
+      <div class="explorer-toolbar">
+        <label class="search-box" for="bird-search">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.7"></circle><path d="m16 16 4.5 4.5"></path></svg>
+          <input id="bird-search" type="search" placeholder="Busca un ave, familia o rasgo…" autocomplete="off" />
+          <kbd>/</kbd>
+        </label>
+        <label class="select-wrap" for="family-filter"><span class="sr-only">Filtrar por familia</span>
+          <select id="family-filter"><option value="all">Todas las familias</option></select>
+          <span class="select-chevron" aria-hidden="true">⌄</span>
+        </label>
+        <button class="filter-reset" id="reset-filters" type="button">Restablecer <span aria-hidden="true">↺</span></button>
+      </div>
+      <div class="result-bar"><p id="result-count" aria-live="polite">Cargando registros…</p><div class="result-options"><button class="text-filter" id="favorites-only" type="button" aria-pressed="false"><span aria-hidden="true">♡</span> Mis favoritas</button><span class="result-separator" aria-hidden="true"></span><label for="sort-order">Ordenar</label><select id="sort-order" aria-label="Ordenar resultados"><option value="featured">Selección editorial</option><option value="name">Nombre A–Z</option><option value="family">Familia</option></select></div></div>
+      <div class="birds-grid" id="birds-grid" aria-live="polite" aria-busy="true"></div>
+      <div class="empty-state" id="empty-state" hidden>
+        <span class="empty-glyph" aria-hidden="true">⌕</span><h3>No encontramos esa ave</h3><p>Prueba otro nombre o limpia los filtros para volver a mirar.</p><button class="button button-dark" id="empty-reset" type="button">Limpiar búsqueda</button>
+      </div>
+      <div class="catalog-note"><span class="note-dot" aria-hidden="true"></span><p><strong>Catálogo en construcción.</strong> Esta muestra digitaliza una parte de las fichas de la guía de 2023. La relación completa, nomenclatura y descripciones requieren revisión editorial antes de cargar las 84 especies reportadas.</p></div>
+    </section>
+
+    <section class="campus-story" id="campus" aria-labelledby="campus-title">
+      <div class="story-image-wrap"><img src="/assets/observacion-campus.jpg" alt="Grupo de observación de aves en las zonas verdes del campus UAO" loading="lazy" /><span class="image-credit">Fotografía: equipo de campo UAO · guía 2023</span><span class="image-index">CAMPO<br />01—23</span></div>
+      <div class="story-copy">
+        <p class="eyebrow eyebrow-light"><span class="eyebrow-line"></span> Desde 2019 · Escuela de Turismo</p>
+        <h2 id="campus-title">Un refugio<br />entre <em>ciudad y río.</em></h2>
+        <p>El campus sostenible de la UAO forma parte del paisaje del río Cauca y del bosque seco tropical. Sus jardines y zonas verdes ofrecen alimento, descanso y refugio para la avifauna del sur de Cali.</p>
+        <p>Esta guía nace de jornadas de monitoreo y de una invitación sencilla: aprender a mirar, escuchar y cuidar la vida que comparte nuestro campus.</p>
+        <a class="light-arrow-link" href="#galeria">Ver escenas de campo <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="story-side-note"><span>UAO</span><small>un campus para<br />la biodiversidad</small></div>
+    </section>
+
+    <section class="gallery-section section-wrap" id="galeria" aria-labelledby="gallery-title">
+      <div class="gallery-header"><div><p class="eyebrow"><span class="eyebrow-line"></span> Cuaderno visual</p><h2 id="gallery-title">Un instante<br /><em>en el follaje.</em></h2></div><p>Algunos encuentros registrados en la guía ilustrada del campus. Las fotografías se muestran como parte de la galería general; consulta cada ficha para revisar su identificación.</p></div>
+      <div class="field-gallery">
+        <figure class="gallery-card gallery-card-tall"><img src="/assets/gallery-agua.jpg" alt="Ave de plumaje oscuro y cuello azul junto a un curso de agua" loading="lazy" /><figcaption><span>01 · CERCA DEL AGUA</span><b>En la orilla del campus</b></figcaption></figure>
+        <figure class="gallery-card gallery-card-wide"><img src="/assets/pechirrojo.jpg" alt="Ave de plumaje rojo posada en un cerramiento, sin identificación vinculada en esta galería" loading="lazy" /><figcaption><span>02 · DESTELLO ROJO</span><b>Una pausa en el vuelo</b></figcaption></figure>
+        <figure class="gallery-card gallery-card-small"><img src="/assets/gallery-follaje.jpg" alt="Ave observada en medio del follaje del campus" loading="lazy" /><figcaption><span>03 · ENTRE LAS HOJAS</span><b>Una mirada al dosel</b></figcaption></figure>
+      </div>
+      <p class="gallery-credit">Fotografías: Juan Manuel Quintero, Natalia Lenis Sánchez y Diana Carolina Campo Daza · Guía UAO (2023)</p>
+    </section>
+
+    <section class="ar-section" id="realidad-aumentada" aria-labelledby="ar-title">
+      <div class="ar-orbit orbit-one" aria-hidden="true"></div><div class="ar-orbit orbit-two" aria-hidden="true"></div>
+      <div class="ar-copy"><p class="eyebrow eyebrow-light"><span class="eyebrow-line"></span> La guía sale de la página</p><h2 id="ar-title">Mira de cerca.<br /><em>Sin perder el vuelo.</em></h2><p>Una experiencia preparada para explorar una especie en el espacio que te rodea. El modo de cámara de esta versión es una demostración visual; no detecta superficies ni sustituye una escena desplegada en 8th Wall.</p><button class="button button-light" id="open-ar" type="button">Probar experiencia <span aria-hidden="true">↗</span></button></div>
+      <div class="ar-visual" aria-hidden="true"><span class="ar-crosshair crosshair-a"></span><span class="ar-crosshair crosshair-b"></span><span class="ar-label">ENCUADRA<br />UN ESPACIO</span><img src="/assets/loro-cabeciazul.jpg" alt="" /></div>
+      <span class="ar-side-tag">EXPERIENCIA DIGITAL · BETA</span>
+    </section>
+
+    <section class="source-section section-wrap" aria-labelledby="source-title">
+      <div class="source-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div><p class="eyebrow">Una publicación UAO · primera edición 2023</p><h2 id="source-title">Observar también<br />es <em>conservar.</em></h2><p>Contenido basado en <i>Guía ilustrada de las aves del campus de la Universidad Autónoma de Occidente</i>. Autores: Germán Morales Zúñiga y Natalia Lenis Sánchez. La guía refiere una alianza con Wiki Aves de la Universidad Icesi.</p><a class="source-link" href="https://wikiaves.icesi.edu.co/" target="_blank" rel="noopener noreferrer">Explorar Wiki Aves Icesi <span aria-hidden="true">↗</span></a></div>
+      <div class="source-note"><span>NOTA EDITORIAL</span><p>Se preservan las limitaciones y discrepancias observables en la fuente; la revisión taxonómica y de derechos del material gráfico corresponde a la siguiente fase.</p></div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><a class="brand brand-footer" href="#inicio"><span class="brand-mark" aria-hidden="true"><img src="/assets/brand-mark.svg" alt="" /></span><span class="brand-copy"><strong>aves <i>UAO</i></strong><small>campus para la vida</small></span></a><p>Una invitación a mirar más despacio.</p><div class="footer-meta"><span>© UAO · Proyecto de biodiversidad</span><a href="#main">Volver arriba ↑</a></div></footer>
+
+  <dialog id="species-dialog" class="species-dialog" aria-labelledby="detail-name"><button class="dialog-close" type="button" aria-label="Cerrar ficha">×</button><div class="dialog-content" id="detail-content"></div></dialog>
+  <dialog id="ar-dialog" class="ar-dialog" aria-labelledby="ar-dialog-title"><button class="dialog-close ar-close" type="button" aria-label="Cerrar experiencia">×</button><div id="ar-dialog-content"></div></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="/scripts/app.js"></script>
+</body>
+</html>

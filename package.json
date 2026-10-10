@@ -1,0 +1,10 @@
+{
+  "name": "aves-uao-guia",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Guía interactiva de las aves del campus UAO",
+  "scripts": {
+    "start": "mkdir -p backend-java/build && javac --add-modules jdk.httpserver -d backend-java/build $(find backend-java/src/main/java -name '*.java') && java --add-modules jdk.httpserver -cp backend-java/build edu.uao.aves.Main"
+  }
+}
