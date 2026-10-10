@@ -20,7 +20,7 @@ let returnFocusTo;
 // El JSON actual es una muestra editorial; no constituye una base institucional ni persistencia.
 async function loadCatalog() {
   try {
-    const response = await fetch('/data/species.json', { headers: { Accept: 'application/json' } });
+    const response = await fetch('./data/species.json', { headers: { Accept: 'application/json' } });
     if (!response.ok) throw new Error(`No se pudo leer el catálogo (${response.status})`);
     const catalog = await response.json();
     records = Array.isArray(catalog.records) ? catalog.records : [];
