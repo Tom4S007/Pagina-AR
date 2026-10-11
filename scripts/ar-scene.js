@@ -168,7 +168,12 @@ export async function startArScene() {
         scene.add(sun);
         Object.values(objects).forEach((holder) => scene.add(holder));
         camera.position.set(0, 3, 0);
-        overlay.status.textContent = 'Apunta la cámara a la lámina';
+        const report = () => {
+          const c = overlay.canvas;
+          overlay.status.textContent = `canvas ${c.width}x${c.height} · css ${c.clientWidth}x${c.clientHeight} · dpr ${window.devicePixelRatio} · ventana ${innerWidth}x${innerHeight}`;
+        };
+        report();
+        setTimeout(report, 1500);
       },
       listeners: [
         { event: 'reality.imagefound', process: show },
