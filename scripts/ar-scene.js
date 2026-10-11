@@ -18,6 +18,14 @@ const TARGETS = {
 
 let overlay = null;
 let running = false;
+let resizeHandler = null;
+
+// El motor no dimensiona el lienzo (queda en 300x150): se ajusta a la pantalla en píxeles reales.
+function fitCanvas(canvas) {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2); // tope 2x para cuidar rendimiento y batería
+  canvas.width = Math.max(1, Math.round(canvas.clientWidth * dpr));
+  canvas.height = Math.max(1, Math.round(canvas.clientHeight * dpr));
+}
 
 function loadScript(src, attrs = {}) {
   return new Promise((resolve, reject) => {
@@ -40,6 +48,7 @@ function loadEngine() {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => reject(new Error('El motor AR tardó demasiado en iniciar.')), 20000);
     window.addEventListener('xrloaded', () => { clearTimeout(timer); resolve(); }, { once: true });
+    // Si index.html ya trae la etiqueta del motor, no se vuelve a inyectar.
     if (!document.querySelector('script[src*="engine-binary"]')) {
       loadScript(ENGINE_URL, { preloadChunks: 'slam' }).catch((error) => { clearTimeout(timer); reject(error); });
     }
@@ -63,7 +72,7 @@ function buildOverlay(onClose) {
   box.setAttribute('role', 'dialog');
   box.setAttribute('aria-label', 'Experiencia de realidad aumentada');
   box.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#000;';
-    const canvas = document.createElement('canvas');
+  const canvas = document.createElement('canvas');
   canvas.className = 'ar-canvas';
   if (!document.getElementById('ar-canvas-style')) {
     const style = document.createElement('style');
@@ -108,6 +117,7 @@ function placeholderObject(THREE) {
 export function stopArScene() {
   if (running && window.XR8) { try { window.XR8.stop(); } catch { /* ya detenido */ } }
   running = false;
+  if (resizeHandler) { window.removeEventListener('resize', resizeHandler); resizeHandler = null; }
   if (overlay) { overlay.box.remove(); overlay = null; }
   document.body.classList.remove('dialog-open');
   document.removeEventListener('keydown', onKey);
@@ -168,9 +178,11 @@ export async function startArScene() {
         scene.add(sun);
         Object.values(objects).forEach((holder) => scene.add(holder));
         camera.position.set(0, 3, 0);
+        // Diagnóstico temporal: quitar cuando todo funcione.
         const report = () => {
+          if (!overlay) return;
           const c = overlay.canvas;
-          overlay.status.textContent = `canvas ${c.width}x${c.height} · css ${c.clientWidth}x${c.clientHeight} · dpr ${window.devicePixelRatio} · ventana ${innerWidth}x${innerHeight}`;
+          overlay.status.textContent = `canvas ${c.width}x${c.height} · css ${c.clientWidth}x${c.clientHeight} · dpr ${window.devicePixelRatio}`;
         };
         report();
         setTimeout(report, 1500);
@@ -189,6 +201,9 @@ export async function startArScene() {
       XR8.XrController.pipelineModule(),
       sceneModule,
     ]);
+    fitCanvas(overlay.canvas);
+    resizeHandler = () => { if (overlay) fitCanvas(overlay.canvas); };
+    window.addEventListener('resize', resizeHandler);
     XR8.run({ canvas: overlay.canvas });
     running = true;
     return true;
