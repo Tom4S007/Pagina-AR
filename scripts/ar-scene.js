@@ -40,7 +40,9 @@ function loadEngine() {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => reject(new Error('El motor AR tardó demasiado en iniciar.')), 20000);
     window.addEventListener('xrloaded', () => { clearTimeout(timer); resolve(); }, { once: true });
-    loadScript(ENGINE_URL, { preloadChunks: 'slam' }).catch((error) => { clearTimeout(timer); reject(error); });
+    if (!document.querySelector('script[src*="engine-binary"]')) {
+      loadScript(ENGINE_URL, { preloadChunks: 'slam' }).catch((error) => { clearTimeout(timer); reject(error); });
+    }
   });
 }
 
@@ -61,8 +63,14 @@ function buildOverlay(onClose) {
   box.setAttribute('role', 'dialog');
   box.setAttribute('aria-label', 'Experiencia de realidad aumentada');
   box.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#000;';
-  const canvas = document.createElement('canvas');
-  canvas.style.cssText = 'width:100%;height:100%;display:block;';
+    const canvas = document.createElement('canvas');
+  canvas.className = 'ar-canvas';
+  if (!document.getElementById('ar-canvas-style')) {
+    const style = document.createElement('style');
+    style.id = 'ar-canvas-style';
+    style.textContent = '.ar-canvas{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;display:block!important;object-fit:cover}';
+    document.head.appendChild(style);
+  }
   const status = document.createElement('div');
   status.setAttribute('aria-live', 'polite');
   status.style.cssText = 'position:absolute;left:12px;right:12px;bottom:max(18px,env(safe-area-inset-bottom));padding:12px 14px;background:rgba(0,0,0,.6);color:#fff;font:600 14px/1.4 system-ui,sans-serif;text-align:center;border-radius:6px;';
