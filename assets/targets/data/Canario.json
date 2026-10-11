@@ -1,0 +1,23 @@
+{
+  "imagePath": "image-targets/Canario_luminance.jpg",
+  "metadata": null,
+  "name": "Canario",
+  "type": "PLANAR",
+  "properties": {
+    "left": 0,
+    "top": 160,
+    "width": 720,
+    "height": 960,
+    "isRotated": true,
+    "originalWidth": 720,
+    "originalHeight": 1280
+  },
+  "resources": {
+    "originalImage": "Canario_original.jpg",
+    "croppedImage": "Canario_cropped.jpg",
+    "thumbnailImage": "Canario_thumbnail.jpg",
+    "luminanceImage": "Canario_luminance.jpg"
+  },
+  "created": 1791745406613,
+  "updated": 1791745406613
+}

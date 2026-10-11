@@ -1,0 +1,23 @@
+{
+  "imagePath": "image-targets/Pechirrojo_luminance.jpg",
+  "metadata": null,
+  "name": "Pechirrojo",
+  "type": "PLANAR",
+  "properties": {
+    "left": 0,
+    "top": 15,
+    "width": 1006,
+    "height": 1341,
+    "isRotated": true,
+    "originalWidth": 1006,
+    "originalHeight": 1370
+  },
+  "resources": {
+    "originalImage": "Pechirrojo_original.jpg",
+    "croppedImage": "Pechirrojo_cropped.jpg",
+    "thumbnailImage": "Pechirrojo_thumbnail.jpg",
+    "luminanceImage": "Pechirrojo_luminance.jpg"
+  },
+  "created": 1791745071824,
+  "updated": 1791745071824
+}

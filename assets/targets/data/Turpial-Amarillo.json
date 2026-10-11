@@ -1,0 +1,23 @@
+{
+  "imagePath": "image-targets/Turpial-Amarillo_luminance.jpg",
+  "metadata": null,
+  "name": "Turpial-Amarillo",
+  "type": "PLANAR",
+  "properties": {
+    "left": 0,
+    "top": 161,
+    "width": 959,
+    "height": 1279,
+    "isRotated": true,
+    "originalWidth": 959,
+    "originalHeight": 1600
+  },
+  "resources": {
+    "originalImage": "Turpial-Amarillo_original.jpg",
+    "croppedImage": "Turpial-Amarillo_cropped.jpg",
+    "thumbnailImage": "Turpial-Amarillo_thumbnail.jpg",
+    "luminanceImage": "Turpial-Amarillo_luminance.jpg"
+  },
+  "created": 1791745021281,
+  "updated": 1791745021281
+}

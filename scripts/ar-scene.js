@@ -13,7 +13,11 @@ const GLTF_LOADER_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/
 const TARGET_BASE = './assets/targets/data/';
 // Nombre del target (campo "name" del JSON) → archivo .glb. null = objeto de prueba (cubo + ejes).
 const TARGETS = {
-  SicSeven: { json: 'SicSeven.json', model: null }, // ej.: './assets/models/pechirrojo.glb'
+  Canario: { json: 'Canario.json', model: null }, // ej.: './assets/models/pechirrojo.glb'
+  Colibri: { json: 'Colibri.json', model: null }, // ej.: './assets/models/pechirrojo.glb'
+  Guacamaya: { json: 'Guacamaya.json', model: null }, // ej.: './assets/models/pechirrojo.glb'
+  Pechirrojo: { json: 'Pechirrojo.json', model: null }, // ej.: './assets/models/pechirrojo.glb'
+  TurpialAmarillo: { json: 'Turpial-Amarillo.json', model: null }, // ej.: './assets/models/pechirrojo.glb'
 };
 
 let overlay = null;
