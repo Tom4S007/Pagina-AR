@@ -1,0 +1,23 @@
+{
+  "imagePath": "image-targets/SicSeven_luminance.jpg",
+  "metadata": null,
+  "name": "SicSeven",
+  "type": "PLANAR",
+  "properties": {
+    "left": 146,
+    "top": 0,
+    "width": 1200,
+    "height": 1600,
+    "isRotated": true,
+    "originalWidth": 1491,
+    "originalHeight": 1600
+  },
+  "resources": {
+    "originalImage": "SicSeven_original.jpg",
+    "croppedImage": "SicSeven_cropped.jpg",
+    "thumbnailImage": "SicSeven_thumbnail.jpg",
+    "luminanceImage": "SicSeven_luminance.jpg"
+  },
+  "created": 1791693285124,
+  "updated": 1791693285124
+}

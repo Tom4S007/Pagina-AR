@@ -1,4 +1,5 @@
 import { createArDialog, stopCameraPreview } from './ar.js';
+import { startArScene } from './ar-scene.js';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const grid = $('#birds-grid');
@@ -168,11 +169,8 @@ $('#open-ar').addEventListener('click', async () => {
   const content = $('#ar-dialog-content');
   // TODO: 8TH WALL — when the project is provisioned, initialize the verified XR8 scene here.
   // Never use a public placeholder key. See README.md for scene, license and deployment setup.
-  const configuredScene = window.AVES_UAO_8THWALL_CONFIG?.startScene;
-  if (window.XR8 && typeof configuredScene === 'function') {
-    try { await configuredScene(); return; }
-    catch (error) { console.warn('Falló el inicio de la escena XR8; se mostrará la demo local.', error); }
-  }
+    // AR real con 8th Wall (scripts/ar-scene.js). Si no es posible, se muestra la demo 2D.
+  if (await startArScene()) return;
   content.innerHTML = createArDialog();
   const arDialog = $('#ar-dialog');
   arDialog.showModal();
