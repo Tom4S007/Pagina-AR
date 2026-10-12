@@ -16,7 +16,7 @@ const TARGETS = {
   Canario: { json: 'Canario.json', model: null }, // ej.: './assets/models/pechirrojo.glb'
   Colibri: { json: 'Colibri.json', model: null }, // ej.: './assets/models/pechirrojo.glb'
   Guacamaya: { json: 'Guacamaya.json', model: null }, // ej.: './assets/models/pechirrojo.glb'
-  Pechirrojo: { json: 'Pechirrojo.json', model: 'assets\models\pechirrojo animacion.glb' }, // ej.: './assets/models/pechirrojo.glb'
+  Pechirrojo: { json: 'Pechirrojo.json', model: 'assets/models/pechirrojo animacion.glb' }, // ej.: './assets/models/pechirrojo.glb'
   TurpialAmarillo: { json: 'Turpial-Amarillo.json', model: null }, // ej.: './assets/models/pechirrojo.glb'
 };
 
