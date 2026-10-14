@@ -5,19 +5,61 @@
 // Licencia: el binario de 8th Wall se distribuye con licencia de uso limitado.
 // Revisar «Permitted Use» y atribución antes de publicar en un sitio institucional.
 
+import {
+  ensureFbxLoader, loadFbxBird, buildEntries, createAnimator, addTouchProxy, pickBird,
+} from './ar-models.js';
+
 const ENGINE_URL = 'https://cdn.jsdelivr.net/npm/@8thwall/engine-binary@1/dist/xr.js';
 const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js';
 const GLTF_LOADER_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
 
 // Carpeta (relativa a la página) con el JSON y las imágenes generadas por la CLI.
 const TARGET_BASE = './assets/targets/data/';
-// Nombre del target (campo "name" del JSON) → archivo .glb. null = objeto de prueba (cubo + ejes).
+// Nombre del target (campo "name" del JSON) → modelo (.fbx o .glb). null = objeto de prueba (cubo + ejes).
+// Opciones de los .fbx:
+//   fit    tamaño (lado más largo) del ave en unidades de la lámina; ajústalo si se ve grande o pequeña.
+//   remove nombres de mallas sueltas que no son parte del ave.
+//   color / texture  respaldo si el FBX no trae su textura (ver fixMaterials en ar-models.js).
+//   clips  animaciones recortadas del clip del FBX (segundos). Si se omite, se usan los clips del archivo.
+//   idle   nombre de la animación de reposo (se repite en bucle; las demás se lanzan con un toque).
 const TARGETS = {
-  Canario: { json: 'Canario.json', model: 'assets/models/canario.fbx' }, // ej.: './assets/models/pechirrojo.glb'
-  Colibri: { json: 'Colibri.json', model: null }, // ej.: './assets/models/pechirrojo.glb'
-  Guacamaya: { json: 'Guacamaya.json', model: 'assets/models/guacamaya.fbx' }, // ej.: './assets/models/pechirrojo.glb'
-  Pechirrojo: { json: 'Pechirrojo.json', model: 'assets/models/pechirrojo.fbx' }, // ej.: './assets/models/pechirrojo.glb'
-  TurpialAmarillo: { json: 'Turpial-Amarillo.json', model: null }, // ej.: './assets/models/pechirrojo.glb'
+  Canario: {
+    json: 'Canario.json',
+    model: 'assets/models/canario.fbx',
+    color: 0xf2c230, // el FBX apunta a una captura de pantalla que no está en el repo
+    clips: {
+      reposo: { from: 9.25, to: 10.75, loop: 'pingpong' },
+      vuelo: { from: 0, to: 5 },
+      aterrizaje: { from: 5.25, to: 9.25 },
+      picoteo: { from: 11, to: 13 },
+    },
+    idle: 'reposo',
+  },
+  Colibri: { json: 'Colibri.json', model: null }, // colibri.zip aún no está descomprimido
+  Guacamaya: {
+    json: 'Guacamaya.json',
+    model: 'assets/models/guacamaya.fbx',
+    color: 0xc8281e, // el FBX apunta a una imagen de WhatsApp que no está en el repo
+    clips: {
+      reposo: { from: 9.75, to: 11, loop: 'pingpong' },
+      vuelo: { from: 0, to: 4.75 },
+      aterrizaje: { from: 5.25, to: 9.75 },
+      picoteo: { from: 11, to: 13 },
+    },
+    idle: 'reposo',
+  },
+  Pechirrojo: {
+    json: 'Pechirrojo.json',
+    model: 'assets/models/pechirrojo.fbx',
+    remove: ['Cubo001'], // cubo negro suelto bajo el ave
+    clips: {
+      reposo: { from: 5, to: 5.75, loop: 'pingpong' },
+      aleteo: { from: 1.75, to: 4.75 },
+      acicalar: { from: 6, to: 7.5 },
+    },
+    idle: 'reposo',
+  },
+  TurpialAmarillo: { json: 'Turpial-Amarillo.json', model: null },
 };
 
 let overlay = null;
@@ -100,12 +142,12 @@ function buildOverlay(onClose) {
   return { box, canvas, status };
 }
 
-function loadModel(THREE, url) {
-  return new Promise((resolve, reject) => {
-    const start = () => new THREE.GLTFLoader().load(url, (gltf) => resolve(gltf.scene), undefined, reject);
-    if (THREE.GLTFLoader) start();
-    else loadScript(GLTF_LOADER_URL).then(start, reject);
-  });
+// Devuelve { object, root, clips, size }. Los .fbx se normalizan (tamaño/posición); los .glb se usan tal cual.
+async function loadModel(THREE, cfg) {
+  if (/\.fbx$/i.test(cfg.model)) return loadFbxBird(THREE, cfg);
+  if (!THREE.GLTFLoader) await loadScript(GLTF_LOADER_URL);
+  const gltf = await new Promise((resolve, reject) => new THREE.GLTFLoader().load(cfg.model, resolve, undefined, reject));
+  return { object: gltf.scene, root: gltf.scene, clips: gltf.animations || [], size: null };
 }
 
 function placeholderObject(THREE) {
@@ -142,18 +184,30 @@ export async function startArScene() {
     const THREE = window.THREE;
     const targetData = await loadTargets();
 
-    // Un objeto 3D por target, indexado por nombre.
+    // Un objeto 3D por target, indexado por nombre. Los modelos se cargan en paralelo.
+    if (Object.values(TARGETS).some((cfg) => /\.fbx$/i.test(cfg.model || ''))) await ensureFbxLoader(THREE, loadScript);
     const objects = {};
-    for (const data of targetData) {
+    const animators = {};
+    await Promise.all(targetData.map(async (data) => {
       const cfg = TARGETS[data.name] || {};
-      let object;
-      try { object = cfg.model ? await loadModel(THREE, cfg.model) : placeholderObject(THREE); }
-      catch (error) { console.warn(`Modelo de ${data.name} no disponible; se usa el objeto de prueba.`, error); object = placeholderObject(THREE); }
+      let model = null;
+      try { if (cfg.model) model = await loadModel(THREE, cfg); }
+      catch (error) { console.warn(`Modelo de ${data.name} no disponible; se usa el objeto de prueba.`, error); }
       const holder = new THREE.Group();
       holder.visible = false;
-      holder.add(object);
+      holder.add(model ? model.object : placeholderObject(THREE));
+      if (model && model.clips.length) {
+        const entries = buildEntries(THREE, model.clips, cfg.clips);
+        const animator = createAnimator(THREE, model.root, entries, cfg.idle, (clip) => {
+          if (overlay && holder.visible) overlay.status.textContent = `${data.name} · ${clip} (toca el ave para cambiar)`;
+        });
+        animator.start();
+        animators[data.name] = animator;
+      }
+      if (model && model.size) addTouchProxy(THREE, holder, model.size, model.lift);
       objects[data.name] = holder;
-    }
+    }));
+    const clock = new THREE.Clock();
 
     const XR8 = window.XR8;
     XR8.XrController.configure({ imageTargetData: targetData });
@@ -165,7 +219,7 @@ export async function startArScene() {
       holder.quaternion.copy(detail.rotation);
       holder.scale.set(detail.scale, detail.scale, detail.scale);
       holder.visible = true;
-      overlay.status.textContent = 'Lámina detectada';
+      overlay.status.textContent = animators[detail.name] ? `${detail.name} · toca el ave para animarla` : 'Lámina detectada';
     };
     const hide = ({ detail }) => {
       if (objects[detail.name]) objects[detail.name].visible = false;
@@ -182,6 +236,17 @@ export async function startArScene() {
         scene.add(sun);
         Object.values(objects).forEach((holder) => scene.add(holder));
         camera.position.set(0, 3, 0);
+
+        // Toque sobre el ave → siguiente animación.
+        const raycaster = new THREE.Raycaster();
+        const ndc = new THREE.Vector2();
+        const canvas = overlay.canvas;
+        canvas.addEventListener('pointerdown', (event) => {
+          const rect = canvas.getBoundingClientRect();
+          ndc.set(((event.clientX - rect.left) / rect.width) * 2 - 1, -((event.clientY - rect.top) / rect.height) * 2 + 1);
+          const name = pickBird(THREE, raycaster, ndc, camera, objects);
+          if (name && animators[name]) animators[name].next();
+        });
         // Diagnóstico temporal: quitar cuando todo funcione.
         const report = () => {
           if (!overlay) return;
@@ -190,6 +255,10 @@ export async function startArScene() {
         };
         report();
         setTimeout(report, 1500);
+      },
+      onUpdate: () => {
+        const dt = clock.getDelta();
+        Object.values(animators).forEach((animator) => animator.update(dt));
       },
       listeners: [
         { event: 'reality.imagefound', process: show },
