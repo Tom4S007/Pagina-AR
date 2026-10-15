@@ -6,7 +6,7 @@
 // Revisar «Permitted Use» y atribución antes de publicar en un sitio institucional.
 
 import {
-  ensureFbxLoader, loadFbxBird, buildEntries, createAnimator, addTouchProxy, pickBird,
+  ensureFbxLoader, loadFbxBird, buildEntries, createAnimator, fitModel, addTouchProxy, pickBird,
 } from './ar-models.js';
 
 const ENGINE_URL = 'https://cdn.jsdelivr.net/npm/@8thwall/engine-binary@1/dist/xr.js';
@@ -17,16 +17,18 @@ const GLTF_LOADER_URL = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/
 const TARGET_BASE = './assets/targets/data/';
 // Nombre del target (campo "name" del JSON) → modelo (.fbx o .glb). null = objeto de prueba (cubo + ejes).
 // Opciones de los .fbx:
-//   fit    tamaño (lado más largo) del ave en unidades de la lámina; ajústalo si se ve grande o pequeña.
-//   remove nombres de mallas sueltas que no son parte del ave.
-//   color / texture  respaldo si el FBX no trae su textura (ver fixMaterials en ar-models.js).
+//   fit      tamaño (lado más largo) del ave en unidades de la lámina; ajústalo si se ve grande o pequeña.
+//   rotation [x, y, z] en grados; todas las aves se giran para mirar hacia +Z (el borde inferior de la lámina).
+//   remove   nombres de mallas sueltas que no son parte del ave.
+//   texture / color / colors  respaldo si el FBX no trae su textura (ver fixMaterials en ar-models.js).
 //   clips  animaciones recortadas del clip del FBX (segundos). Si se omite, se usan los clips del archivo.
 //   idle   nombre de la animación de reposo (se repite en bucle; las demás se lanzan con un toque).
 const TARGETS = {
   Canario: {
     json: 'Canario.json',
-    model: 'assets/models/canario.fbx',
+    model: 'assets/models/Canario/source/canario.fbx',
     color: 0xf2c230, // el FBX apunta a una captura de pantalla que no está en el repo
+    rotation: [0, 90, 0],
     clips: {
       reposo: { from: 9.25, to: 10.75, loop: 'pingpong' },
       vuelo: { from: 0, to: 5 },
@@ -35,11 +37,21 @@ const TARGETS = {
     },
     idle: 'reposo',
   },
-  Colibri: { json: 'Colibri.json', model: null }, // colibri.zip aún no está descomprimido
+  Colibri: {
+    json: 'Colibri.json',
+    model: 'assets/models/colibri/source/colibri.fbx',
+    texture: 'assets/models/colibri/textures/Image_1.png', // el FBX la busca junto a sí mismo, pero está en ../textures
+    clips: {
+      suspendido: { source: 'hover_skeletal.1', loop: 'repeat' },
+      vuelo: { source: 'flight_skeletal.002', from: 0, to: 8, inPlace: true },
+    },
+    idle: 'suspendido',
+  },
   Guacamaya: {
     json: 'Guacamaya.json',
     model: 'assets/models/guacamaya.fbx',
     color: 0xc8281e, // el FBX apunta a una imagen de WhatsApp que no está en el repo
+    rotation: [0, -90, 0],
     clips: {
       reposo: { from: 9.75, to: 11, loop: 'pingpong' },
       vuelo: { from: 0, to: 4.75 },
@@ -52,6 +64,10 @@ const TARGETS = {
     json: 'Pechirrojo.json',
     model: 'assets/models/pechirrojo.fbx',
     remove: ['Cubo001'], // cubo negro suelto bajo el ave
+    rotation: [0, -90, 0],
+    // La textura «plumaje rojo Color base» no viene con el FBX: el cuerpo (material 0) queda en un color liso.
+    // Si añades esa imagen a assets/models/, usa `texture: 'assets/models/<archivo>'` en lugar de `colors`.
+    colors: { 0: 0xd8431f },
     clips: {
       reposo: { from: 5, to: 5.75, loop: 'pingpong' },
       aleteo: { from: 1.75, to: 4.75 },
@@ -142,12 +158,12 @@ function buildOverlay(onClose) {
   return { box, canvas, status };
 }
 
-// Devuelve { object, root, clips, size }. Los .fbx se normalizan (tamaño/posición); los .glb se usan tal cual.
+// Devuelve { root, clips, fbx }. Los .fbx se centran y escalan después (fitModel); los .glb se usan tal cual.
 async function loadModel(THREE, cfg) {
-  if (/\.fbx$/i.test(cfg.model)) return loadFbxBird(THREE, cfg);
+  if (/\.fbx$/i.test(cfg.model)) return { ...(await loadFbxBird(THREE, cfg)), fbx: true };
   if (!THREE.GLTFLoader) await loadScript(GLTF_LOADER_URL);
   const gltf = await new Promise((resolve, reject) => new THREE.GLTFLoader().load(cfg.model, resolve, undefined, reject));
-  return { object: gltf.scene, root: gltf.scene, clips: gltf.animations || [], size: null };
+  return { root: gltf.scene, clips: gltf.animations || [], fbx: false };
 }
 
 function placeholderObject(THREE) {
@@ -195,16 +211,22 @@ export async function startArScene() {
       catch (error) { console.warn(`Modelo de ${data.name} no disponible; se usa el objeto de prueba.`, error); }
       const holder = new THREE.Group();
       holder.visible = false;
-      holder.add(model ? model.object : placeholderObject(THREE));
       if (model && model.clips.length) {
-        const entries = buildEntries(THREE, model.clips, cfg.clips);
+        const entries = buildEntries(THREE, model.clips, cfg.clips, model.rootBones);
         const animator = createAnimator(THREE, model.root, entries, cfg.idle, (clip) => {
           if (overlay && holder.visible) overlay.status.textContent = `${data.name} · ${clip} (toca el ave para cambiar)`;
         });
         animator.start();
+        animator.update(0); // aplica el reposo: el ajuste de tamaño y posición se mide con esa pose
         animators[data.name] = animator;
       }
-      if (model && model.size) addTouchProxy(THREE, holder, model.size, model.lift);
+      if (model && model.fbx) {
+        const fitted = fitModel(THREE, model.root, cfg);
+        holder.add(fitted.object);
+        addTouchProxy(THREE, holder, fitted.size, fitted.lift);
+      } else {
+        holder.add(model ? model.root : placeholderObject(THREE));
+      }
       objects[data.name] = holder;
     }));
     const clock = new THREE.Clock();

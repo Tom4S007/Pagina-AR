@@ -15,7 +15,9 @@ export async function ensureFbxLoader(THREE, loadScript) {
 
 // Recorta [from, to] segundos de un clip. Se muestrea cada pista (en vez de AnimationUtils.subclip)
 // porque en los FBX cada hueso trae su propio número de keyframes y subclip dejaría pistas sin valores.
-export function sampleSubclip(THREE, clip, name, from, to, fps = 30) {
+// freeze: nombres de pistas (p. ej. «Root.position») que se dejan fijas en su primer valor, para que
+// la animación no desplace al ave de la lámina (vuelos que avanzan en el clip original).
+export function sampleSubclip(THREE, clip, name, from, to, fps = 30, freeze = []) {
   const length = to - from;
   const count = Math.max(2, Math.round(length * fps) + 1);
   const tracks = clip.tracks.map((track) => {
@@ -23,9 +25,10 @@ export function sampleSubclip(THREE, clip, name, from, to, fps = 30) {
     const size = track.getValueSize();
     const times = new Float32Array(count);
     const values = new Float32Array(count * size);
+    const frozen = freeze.includes(track.name);
     for (let i = 0; i < count; i += 1) {
       times[i] = Math.min(i / fps, length);
-      const sample = interpolant.evaluate(from + times[i]);
+      const sample = interpolant.evaluate(from + (frozen ? 0 : times[i]));
       for (let k = 0; k < size; k += 1) values[i * size + k] = sample[k];
     }
     return new track.constructor(track.name, times, values);
@@ -33,19 +36,30 @@ export function sampleSubclip(THREE, clip, name, from, to, fps = 30) {
   return new THREE.AnimationClip(name, length, tracks);
 }
 
-// spec = { nombre: { from, to, loop: 'pingpong' | 'repeat' | 'once' } } sobre el clip fuente.
+// spec = { nombre: { from, to, loop, source } } sobre los clips del archivo.
+//   source: índice o parte del nombre del clip del FBX (por defecto, el primero).
+//   from/to: segundos a recortar (por defecto, el clip completo).
+//   loop: 'pingpong' | 'repeat' | 'once' (por defecto 'once').
+//   inPlace: true → el hueso raíz no se desplaza (el ave vuela «en el sitio» sobre la lámina).
 // Sin spec se usan los clips tal cual vienen en el archivo (el primero hace de reposo).
-export function buildEntries(THREE, sourceClips, spec, sourceIndex = 0) {
+function findSource(clips, source) {
+  if (typeof source === 'number') return clips[source];
+  if (typeof source === 'string') return clips.find((c) => c.name.includes(source));
+  return clips[0];
+}
+
+export function buildEntries(THREE, sourceClips, spec, rootBones = []) {
   if (!spec) {
     return sourceClips.map((clip, i) => ({ name: clip.name || `clip${i}`, clip, loop: i === 0 ? 'repeat' : 'once' }));
   }
-  const source = sourceClips[sourceIndex] || sourceClips[0];
-  if (!source) return [];
-  return Object.entries(spec).map(([name, def]) => ({
-    name,
-    clip: sampleSubclip(THREE, source, name, def.from, Math.min(def.to, source.duration)),
-    loop: def.loop || 'once',
-  }));
+  return Object.entries(spec).flatMap(([name, def]) => {
+    const source = findSource(sourceClips, def.source);
+    if (!source) { console.warn(`Animación «${name}»: no se encontró el clip ${def.source ?? 0}`); return []; }
+    const from = def.from ?? 0;
+    const to = Math.min(def.to ?? source.duration, source.duration);
+    const freeze = def.inPlace ? rootBones.map((bone) => `${bone}.position`) : [];
+    return [{ name, clip: sampleSubclip(THREE, source, name, from, to, 30, freeze), loop: def.loop || 'once' }];
+  });
 }
 
 // Mezcla de animaciones: el reposo se repite; las demás se reproducen una vez y vuelven al reposo.
@@ -102,18 +116,43 @@ export function createAnimator(THREE, root, entries, idleName, onChange) {
   };
 }
 
-// Centra el modelo, lo apoya en y=0 y lo escala para que su lado más largo mida `fit` unidades.
-// Los FBX vienen en unidades muy distintas (el pechirrojo mide ~9, la guacamaya ~43), por eso se normaliza.
-export function fitObject(THREE, object, fit = 0.8, lift = 0) {
+// Caja que envuelve al modelo EN LA POSE ACTUAL (con el esqueleto aplicado). Box3.setFromObject usaría la
+// pose original (T-pose), que en estos FBX está rotada y desplazada respecto a la pose animada.
+function posedBounds(THREE, object) {
   object.updateMatrixWorld(true);
-  const box = new THREE.Box3().setFromObject(object);
+  const box = new THREE.Box3();
+  const v = new THREE.Vector3();
+  object.traverse((o) => {
+    if (!o.isMesh) return;
+    const pos = o.geometry.attributes.position;
+    const stride = Math.max(1, Math.floor(pos.count / 20000));
+    for (let i = 0; i < pos.count; i += stride) {
+      v.fromBufferAttribute(pos, i);
+      if (o.isSkinnedMesh) o.boneTransform(i, v);
+      v.applyMatrix4(o.matrixWorld);
+      box.expandByPoint(v);
+    }
+  });
+  return box;
+}
+
+// Gira (cfg.rotation, grados XYZ), centra el modelo, lo apoya en y=0 y lo escala para que su lado más largo
+// mida cfg.fit unidades. Los FBX vienen en unidades muy distintas (colibri ~8, guacamaya ~43), por eso se
+// normaliza. Hay que llamarla con el reposo ya aplicado (animator.start() + update(0)).
+export function fitModel(THREE, root, cfg) {
+  const rotation = (cfg.rotation || [0, 0, 0]).map((deg) => (deg * Math.PI) / 180);
+  const rot = new THREE.Group();
+  rot.rotation.set(rotation[0], rotation[1], rotation[2]);
+  rot.add(root);
+  const box = posedBounds(THREE, rot);
   const size = box.getSize(new THREE.Vector3());
   const center = box.getCenter(new THREE.Vector3());
-  const k = fit / Math.max(size.x, size.y, size.z, 1e-6);
+  const lift = cfg.lift ?? 0;
+  const k = (cfg.fit ?? 0.8) / Math.max(size.x, size.y, size.z, 1e-6);
+  rot.scale.setScalar(k);
+  rot.position.set(-center.x * k, -box.min.y * k + lift, -center.z * k);
   const pivot = new THREE.Group();
-  object.scale.multiplyScalar(k);
-  object.position.set(-center.x * k, -box.min.y * k + lift, -center.z * k);
-  pivot.add(object);
+  pivot.add(rot);
   return { object: pivot, size: size.multiplyScalar(k), lift };
 }
 
@@ -142,16 +181,19 @@ export function pickBird(THREE, raycaster, ndc, camera, holders) {
   return hits.length ? hits[0].object.userData.birdName : null;
 }
 
-// Si la textura del FBX no viaja con el archivo (rutas de Windows), el material queda negro o gris.
-// cfg.texture = imagen junto al FBX; cfg.color = color liso de respaldo.
+// Si la textura del FBX no viaja con el archivo (rutas de Windows o imagen aparte), el material queda negro o gris.
+//   cfg.texture  imagen que sustituye la textura rota (ruta desde la página).
+//   cfg.color    color liso de respaldo para los materiales que tenían textura.
+//   cfg.colors   { índiceDeMaterial: color } para fijar colores concretos (tiene prioridad).
 export function fixMaterials(THREE, object, cfg) {
   const texture = cfg.texture ? new THREE.TextureLoader().load(cfg.texture) : null;
   object.traverse((o) => {
     if (!o.isMesh) return;
-    [].concat(o.material).forEach((m) => {
-      if (!m.map) return;
-      if (texture) { m.map = texture; m.color.set(0xffffff); }
-      else if (cfg.color != null) { m.map = null; m.color.set(cfg.color); }
+    [].concat(o.material).forEach((m, index) => {
+      if (cfg.colors && cfg.colors[index] != null) { m.map = null; m.color.set(cfg.colors[index]); }
+      else if (m.map && texture) { m.map = texture; m.color.set(0xffffff); }
+      else if (m.map && cfg.color != null) { m.map = null; m.color.set(cfg.color); }
+      else return;
       m.needsUpdate = true;
     });
   });
@@ -161,15 +203,20 @@ function parseFbx(THREE, url) {
   return new Promise((resolve, reject) => new THREE.FBXLoader().load(url, resolve, undefined, reject));
 }
 
-// Carga un ave FBX lista para colgar de un holder: { object, clips, size }.
+// Huesos de primer nivel (sin hueso padre): son los que mueven al ave entera.
+function findRootBones(root) {
+  const names = [];
+  root.traverse((o) => { if (o.isBone && !(o.parent && o.parent.isBone)) names.push(o.name); });
+  return names;
+}
+
+// Carga un ave FBX: { root, clips, rootBones }. Después hay que ponerle el reposo y llamar a fitModel.
 export async function loadFbxBird(THREE, cfg) {
   const root = await parseFbx(THREE, cfg.model);
-  (cfg.remove || []).forEach((name) => {
-    const extra = root.getObjectByName(name);
-    if (extra && extra.parent) extra.parent.remove(extra);
-  });
+  // Algunos FBX traen cámara y luces de la escena de Blender: no deben entrar a la escena AR.
+  const extras = [];
+  root.traverse((o) => { if (o.isCamera || o.isLight || (cfg.remove || []).includes(o.name)) extras.push(o); });
+  extras.forEach((o) => { if (o.parent) o.parent.remove(o); });
   fixMaterials(THREE, root, cfg);
-  const clips = root.animations.slice();
-  const fitted = fitObject(THREE, root, cfg.fit ?? 0.8, cfg.lift ?? 0);
-  return { object: fitted.object, root, clips, size: fitted.size, lift: fitted.lift };
+  return { root, clips: root.animations.slice(), rootBones: findRootBones(root) };
 }
