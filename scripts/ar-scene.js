@@ -87,7 +87,7 @@ const TARGETS = {
       aterrizaje: { from: 8, to: 9.5 },
     },
     idle: 'reposo',
-  },  
+  }, 
 };
 
 let overlay = null;
