@@ -49,7 +49,7 @@ const TARGETS = {
   },
   Guacamaya: {
     json: 'Guacamaya.json',
-    model: 'assets/models/guacamaya.fbx',
+    model: 'assets/models/Guacamaya/source/guacamaya.fbx',
     texture: 'assets/models/Guacamaya/texture/guacamaya.jpeg', // el FBX apunta a una imagen de WhatsApp que no está en el repo
     rotation: [0, -90, 0],
     clips: {
