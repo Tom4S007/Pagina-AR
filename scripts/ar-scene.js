@@ -23,11 +23,9 @@ const TARGET_BASE = './assets/targets/data/';
 //   texture / color / colors  respaldo si el FBX no trae su textura (ver fixMaterials en ar-models.js).
 //   clips  animaciones recortadas del clip del FBX (segundos). Si se omite, se usan los clips del archivo.
 //   idle   nombre de la animación de reposo (se repite en bucle; las demás se lanzan con un toque).
-//   sound  { src, volume, loop } audio que suena al detectar la lámina (opcional; ver «Sonido» más abajo).
 const TARGETS = {
   Canario: {
     json: 'Canario.json',
-    sound: { src: 'assets/audio/canario.mp3', volume: 0.8, loop: false }, // sonido al detectar la lámina
     model: 'assets/models/Canario/source/canario.fbx',
     texture: 'assets/models/Canario/texture/canario-texture.jpg', // el FBX apunta a una captura de pantalla que no está en el repo
     rotation: [0, 90, 0],
@@ -41,7 +39,6 @@ const TARGETS = {
   },
   Colibri: {
     json: 'Colibri.json',
-    sound: { src: 'assets/audio/colibri.mp3', volume: 0.8, loop: false }, // sonido al detectar la lámina
     model: 'assets/models/colibri/source/colibri.fbx',
     texture: 'assets/models/colibri/textures/Image_1.png', // el FBX la busca junto a sí mismo, pero está en ../textures
     clips: {
@@ -52,7 +49,6 @@ const TARGETS = {
   },
   Guacamaya: {
     json: 'Guacamaya.json',
-    sound: { src: 'assets/audio/guacamaya.mp3', volume: 0.8, loop: false }, // sonido al detectar la lámina
     model: 'assets/models/Guacamaya/source/guacamaya.fbx',
     texture: 'assets/models/Guacamaya/texture/guacamaya.jpeg', // el FBX apunta a una imagen de WhatsApp que no está en el repo
     rotation: [90, 0, 90], // 1: 2:rota como tronco
@@ -66,11 +62,13 @@ const TARGETS = {
   },
   Pechirrojo: {
     json: 'Pechirrojo.json',
-    sound: { src: 'assets/audio/pechirrojo.mp3', volume: 0.8, loop: false }, // sonido al detectar la lámina
     model: 'assets/models/Pechirrojo/source/pechirrojo.fbx',
-    texture: 'assets/models/Pechirrojo/texture/449fad44-b4d7-40ed-8f18-1c85c594ccf8.jpg', // «plumaje rojo Color base»: el FBX no la trae
+    texture : 'assets/models/Pechirrojo/texture/449fad44-b4d7-40ed-8f18-1c85c594ccf8.jpg',
     remove: ['Cubo001'], // cubo negro suelto bajo el ave
     rotation: [0, -90, 0],
+    // La textura «plumaje rojo Color base» no viene con el FBX: el cuerpo (material 0) queda en un color liso.
+    // Si añades esa imagen a assets/models/, usa `texture: 'assets/models/<archivo>'` en lugar de `colors`.
+    colors: { 0: 0xd8431f },
     clips: {
       reposo: { from: 5, to: 5.75, loop: 'pingpong' },
       aleteo: { from: 1.75, to: 4.75 },
@@ -78,13 +76,8 @@ const TARGETS = {
     },
     idle: 'reposo',
   },
-  // La clave debe ser igual al campo «name» del JSON ("Turpial-Amarillo"), si no el ave no se encuentra.
-  // Turpial/source/Turpial.fbx es estático (sin esqueleto ni animación); el animado es «Turpial amarillo1.fbx».
-  // Un solo clip de 13.17 s ("Esqueleto|Esqueleto_acción"): movimiento fuerte de 0 a 9.25 s y casi quieto de 9.5 s en adelante.
-  // TODO: tiempos estimados por la cantidad de movimiento; revisarlos viendo el clip y ajustar rotation/fit.
-  'Turpial-Amarillo': {
+  TurpialAmarillo: {
     json: 'Turpial-Amarillo.json',
-    sound: { src: 'assets/audio/turpial.mp3', volume: 0.8, loop: false }, // sonido al detectar la lámina
     model: 'assets/models/Turpial/Turpial amarillo1.fbx', // ← pon null para volver al objeto de prueba (cubo)
     texture: 'assets/models/Turpial/texture/PLUMAS.png', // el FBX apunta a D:\Descargas\PLUMAS.png
     rotation: [0, 90, 0], // ← orientación sin comprobar
@@ -94,53 +87,12 @@ const TARGETS = {
       aterrizaje: { from: 8, to: 9.5 },
     },
     idle: 'reposo',
-  },
+  },  
 };
 
 let overlay = null;
 let running = false;
 let resizeHandler = null;
-
-// ---- Sonido ----
-const sounds = {};           // nombre del target → { audio, last }
-let muted = false;
-const SOUND_COOLDOWN = 4000; // ms: evita repetir el canto si la lámina se pierde y se recupera al instante
-
-// Debe ejecutarse DENTRO del toque del botón (antes de cualquier await): así el navegador permite el audio después.
-function prepareSounds() {
-  Object.entries(TARGETS).forEach(([name, cfg]) => {
-    if (!cfg.sound || sounds[name]) return;
-    const audio = new Audio(cfg.sound.src);
-    audio.preload = 'auto';
-    audio.loop = !!cfg.sound.loop;
-    audio.volume = cfg.sound.volume ?? 0.8;
-    // Desbloqueo: se reproduce en silencio y se pausa de inmediato.
-    audio.muted = true;
-    audio.play()
-      .then(() => { audio.pause(); audio.currentTime = 0; audio.muted = false; })
-      .catch(() => { audio.muted = false; });
-    sounds[name] = { audio, last: 0 };
-  });
-}
-
-function playSound(name) {
-  const entry = sounds[name];
-  if (!entry || muted) return;
-  const now = Date.now();
-  if (now - entry.last < SOUND_COOLDOWN) return;
-  entry.last = now;
-  entry.audio.currentTime = 0;
-  entry.audio.play().catch(() => { /* el navegador lo bloqueó o falta el archivo: se ignora */ });
-}
-
-function stopSound(name) {
-  const entry = sounds[name];
-  if (entry) entry.audio.pause();
-}
-
-function stopAllSounds() {
-  Object.keys(sounds).forEach(stopSound);
-}
 
 // El motor no dimensiona el lienzo (queda en 300x150): se ajusta a la pantalla en píxeles reales.
 function fitCanvas(canvas) {
@@ -212,18 +164,7 @@ function buildOverlay(onClose) {
   close.setAttribute('aria-label', 'Cerrar realidad aumentada');
   close.style.cssText = 'position:absolute;top:max(12px,env(safe-area-inset-top));right:12px;padding:10px 14px;border:0;border-radius:6px;background:#fff;color:#8a1428;font:700 14px system-ui,sans-serif;cursor:pointer;';
   close.addEventListener('click', onClose);
-  const mute = document.createElement('button');
-  mute.type = 'button';
-  mute.textContent = '🔊';
-  mute.setAttribute('aria-label', 'Silenciar sonido');
-  mute.style.cssText = 'position:absolute;top:max(12px,env(safe-area-inset-top));left:12px;padding:10px 14px;border:0;border-radius:6px;background:#fff;font:700 16px system-ui,sans-serif;cursor:pointer;';
-  mute.addEventListener('click', () => {
-    muted = !muted;
-    mute.textContent = muted ? '🔇' : '🔊';
-    mute.setAttribute('aria-label', muted ? 'Activar sonido' : 'Silenciar sonido');
-    if (muted) stopAllSounds();
-  });
-  box.append(canvas, status, close, mute);
+  box.append(canvas, status, close);
   document.body.appendChild(box);
   document.body.classList.add('dialog-open');
   return { box, canvas, status };
@@ -248,7 +189,6 @@ function placeholderObject(THREE) {
 }
 
 export function stopArScene() {
-  stopAllSounds();
   if (running && window.XR8) { try { window.XR8.stop(); } catch { /* ya detenido */ } }
   running = false;
   if (resizeHandler) { window.removeEventListener('resize', resizeHandler); resizeHandler = null; }
@@ -264,9 +204,9 @@ export async function startArScene() {
   if (running) return true;
   if (!navigator.mediaDevices?.getUserMedia) return false;
   overlay = buildOverlay(stopArScene);
-  prepareSounds(); // dentro del toque del usuario, antes del primer await
   document.addEventListener('keydown', onKey);
   try {
+    overlay.status.textContent = 'Cargando motor AR…';
     await loadEngine();
     await loadScript(THREE_URL).catch(() => { throw new Error('No se pudo cargar three.js'); });
     const THREE = window.THREE;
@@ -317,7 +257,6 @@ export async function startArScene() {
     };
     const hide = ({ detail }) => {
       if (objects[detail.name]) objects[detail.name].visible = false;
-      stopSound(detail.name);
       overlay.status.textContent = 'Apunta la cámara a la lámina';
     };
 
@@ -356,7 +295,7 @@ export async function startArScene() {
         Object.values(animators).forEach((animator) => animator.update(dt));
       },
       listeners: [
-        { event: 'reality.imagefound', process: (event) => { show(event); playSound(event.detail.name); } },
+        { event: 'reality.imagefound', process: show },
         { event: 'reality.imageupdated', process: show },
         { event: 'reality.imagelost', process: hide },
       ],
