@@ -78,7 +78,7 @@ const TARGETS = {
   },
   TurpialAmarillo: {
     json: 'Turpial-Amarillo.json',
-    model: 'assets/models/Turpial/Turpial amarillo1.fbx', // ← pon null para volver al objeto de prueba (cubo)
+    model: 'assets/models/Turpial/source/turpial.fbx', // ← pon null para volver al objeto de prueba (cubo)
     texture: 'assets/models/Turpial/texture/PLUMAS.png', // el FBX apunta a D:\Descargas\PLUMAS.png
     rotation: [0, 90, 0], // ← orientación sin comprobar
     clips: {
