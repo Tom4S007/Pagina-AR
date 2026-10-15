@@ -62,7 +62,7 @@ const TARGETS = {
   },
   Pechirrojo: {
     json: 'Pechirrojo.json',
-    model: 'assets/models/pechirrojo.fbx',
+    model: 'assets/models/Pechirrojo/source/pechirrojo.fbx',
     remove: ['Cubo001'], // cubo negro suelto bajo el ave
     rotation: [0, -90, 0],
     // La textura «plumaje rojo Color base» no viene con el FBX: el cuerpo (material 0) queda en un color liso.
@@ -86,7 +86,7 @@ const TARGETS = {
       aterrizaje: { from: 8, to: 9.5 },
     },
     idle: 'reposo',
-  },
+  },  
 };
 
 let overlay = null;
