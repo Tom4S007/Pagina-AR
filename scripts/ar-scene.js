@@ -75,7 +75,18 @@ const TARGETS = {
     },
     idle: 'reposo',
   },
-  TurpialAmarillo: { json: 'Turpial-Amarillo.json', model: null },
+  TurpialAmarillo: {
+    json: 'Turpial-Amarillo.json',
+    model: 'assets/models/Turpial/Turpial amarillo1.fbx', // ← pon null para volver al objeto de prueba (cubo)
+    texture: 'assets/models/Turpial/texture/PLUMAS.png', // el FBX apunta a D:\Descargas\PLUMAS.png
+    rotation: [0, 90, 0], // ← orientación sin comprobar
+    clips: {
+      reposo: { from: 9.5, to: 10.5, loop: 'pingpong' },
+      vuelo: { from: 0, to: 8 },
+      aterrizaje: { from: 8, to: 9.5 },
+    },
+    idle: 'reposo',
+  },
 };
 
 let overlay = null;
