@@ -284,7 +284,6 @@ export async function startArScene() {
         const report = () => {
           if (!overlay) return;
           const c = overlay.canvas;
-          overlay.status.textContent = `canvas ${c.width}x${c.height} · css ${c.clientWidth}x${c.clientHeight} · dpr ${window.devicePixelRatio}`;
         };
         report();
         setTimeout(report, 1500);
