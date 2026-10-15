@@ -1,5 +1,6 @@
 import { createArDialog, stopCameraPreview } from './ar.js';
 import { startArScene } from './ar-scene.js';
+import './quiz.js';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const grid = $('#birds-grid');
