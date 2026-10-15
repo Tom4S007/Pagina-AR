@@ -27,7 +27,7 @@ const TARGETS = {
   Canario: {
     json: 'Canario.json',
     model: 'assets/models/Canario/source/canario.fbx',
-    color: 0xf2c230, // el FBX apunta a una captura de pantalla que no está en el repo
+    texture: 'assets/models/Canario/texture/canario-texture.jpg', // el FBX apunta a una captura de pantalla que no está en el repo
     rotation: [0, 90, 0],
     clips: {
       reposo: { from: 9.25, to: 10.75, loop: 'pingpong' },
@@ -50,7 +50,7 @@ const TARGETS = {
   Guacamaya: {
     json: 'Guacamaya.json',
     model: 'assets/models/guacamaya.fbx',
-    color: 0xc8281e, // el FBX apunta a una imagen de WhatsApp que no está en el repo
+    texture: 'assets/models/Guacamaya/texture/guacamaya.jpeg', // el FBX apunta a una imagen de WhatsApp que no está en el repo
     rotation: [0, -90, 0],
     clips: {
       reposo: { from: 9.75, to: 11, loop: 'pingpong' },
